@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { Layout } from "@/components/Layout";
 import { API_URL } from "@/config/api";
 
 // --- Gemini API Details ---
@@ -392,20 +393,22 @@ const Medications = () => {
   const remaining = totalMedications - completedToday;
 
   return (
-    <div className="min-h-screen bg-[#1e1e1e] text-white">
-      <div className="container mx-auto px-4 py-8">
+    <Layout showNav>
+      <div className="min-h-screen bg-black text-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black to-blue-900/30 blur-3xl opacity-40 pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 relative z-10">
         {/* Header */}
-        <div className="flex items-center mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <Button
             variant="ghost"
             onClick={() => navigate("/elders")}
-            className="mr-4 text-white hover:bg-gray-700"
+            className="text-gray-400 hover:text-white hover:bg-[#1e1e1e]"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" /> Back
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Back
           </Button>
-          <div>
-            <h1 className="text-4xl font-bold">Medication Management</h1>
-            <p className="text-gray-400 mt-2">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Medication Management</h1>
+            <p className="text-sm sm:text-base text-gray-400 mt-2">
               {selectedElderName ? (
                 <>Managing medications for <span className="font-semibold text-purple-400">{selectedElderName}</span></>
               ) : (
@@ -416,49 +419,51 @@ const Medications = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Card className="p-6 bg-[#2a2a2a] border border-gray-700 text-center">
-            <div className="text-3xl font-bold mb-2">{totalMedications}</div>
-            <div className="text-sm text-gray-400">Total Medications</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <Card className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 text-center hover:shadow-lg transition-all duration-200">
+            <div className="text-2xl sm:text-3xl font-bold mb-2 text-white">{totalMedications}</div>
+            <div className="text-xs sm:text-sm text-gray-400">Total Medications</div>
           </Card>
-          <Card className="p-6 bg-[#2a2a2a] border border-gray-700 text-center">
-            <div className="text-3xl font-bold mb-2">{completedToday}</div>
-            <div className="text-sm text-gray-400">Completed Today</div>
+          <Card className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 text-center hover:shadow-lg transition-all duration-200">
+            <div className="text-2xl sm:text-3xl font-bold mb-2 text-white">{completedToday}</div>
+            <div className="text-xs sm:text-sm text-gray-400">Completed Today</div>
           </Card>
-          <Card className="p-6 bg-[#2a2a2a] border border-gray-700 text-center">
-            <div className="text-3xl font-bold mb-2">{remaining}</div>
-            <div className="text-sm text-gray-400">Remaining</div>
+          <Card className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 text-center hover:shadow-lg transition-all duration-200">
+            <div className="text-2xl sm:text-3xl font-bold mb-2 text-white">{remaining}</div>
+            <div className="text-xs sm:text-sm text-gray-400">Remaining</div>
           </Card>
         </div>
 
         {/* Upload & Add Buttons */}
-        <div className="flex gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Button
             onClick={() => setShowAddForm(!showAddForm)}
-            className="bg-gray-800 hover:bg-gray-700 text-white"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition shadow-lg"
+            size="sm"
           >
-            <Plus className="w-5 h-5 mr-2" /> Add Medication
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Add Medication
           </Button>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 flex-1">
             <Input
               type="file"
               accept="image/*,application/pdf"
               onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="bg-[#2a2a2a] border-gray-700 text-white w-60"
+              className="bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10 flex-1 sm:flex-none sm:w-64 lg:w-72"
             />
             <Button
               onClick={handlePrescriptionUpload}
               disabled={!file || loading}
-              className="bg-gray-700 hover:bg-gray-600 text-white"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition"
+              size="sm"
             >
               {loading ? (
                 <>
-                  <Loader2 className="animate-spin mr-2" /> Analyzing...
+                  <Loader2 className="animate-spin mr-2 w-4 h-4" /> Analyzing...
                 </>
               ) : (
                 <>
-                  <Upload className="w-5 h-5 mr-2" /> Upload Prescription
+                  <Upload className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Upload Prescription
                 </>
               )}
             </Button>
@@ -467,56 +472,58 @@ const Medications = () => {
 
         {/* Add Form */}
         {showAddForm && (
-          <Card className="p-6 mb-8 bg-[#2a2a2a] border border-gray-700">
-            <h3 className="text-xl font-bold mb-6">
+          <Card className="p-4 sm:p-6 mb-6 sm:mb-8 bg-[#1e1e1e] border border-gray-800">
+            <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white">
               {pendingMeds.length > 0
                 ? `Confirm Medicine (${currentIndex + 1}/${pendingMeds.length})`
                 : "Add New Medication"}
             </h3>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <label>Medication Name</label>
+                <label className="text-sm sm:text-base text-gray-300 mb-2 block">Medication Name</label>
                 <Input
                   value={formData.name}
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="bg-[#1e1e1e] border-gray-600 text-white"
+                  className="bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
+                  placeholder="Enter medication name"
                 />
               </div>
               <div>
-                <label>Dosage</label>
+                <label className="text-sm sm:text-base text-gray-300 mb-2 block">Dosage</label>
                 <Input
                   value={formData.dosage}
                   onChange={(e) =>
                     setFormData({ ...formData, dosage: e.target.value })
                   }
-                  className="bg-[#1e1e1e] border-gray-600 text-white"
+                  className="bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
+                  placeholder="Enter dosage"
                 />
               </div>
               <div>
-                <label>Time</label>
+                <label className="text-sm sm:text-base text-gray-300 mb-2 block">Time</label>
                 <Input
                   type="time"
                   value={formData.time}
                   onChange={(e) =>
                     setFormData({ ...formData, time: e.target.value })
                   }
-                  className="bg-[#1e1e1e] border-gray-600 text-white"
+                  className="bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
                 />
               </div>
               <div>
-                <label>Frequency</label>
+                <label className="text-sm sm:text-base text-gray-300 mb-2 block">Frequency</label>
                 <Select
                   value={formData.frequency}
                   onValueChange={(value) =>
                     setFormData({ ...formData, frequency: value })
                   }
                 >
-                  <SelectTrigger className="bg-[#1e1e1e] border-gray-600 text-white">
+                  <SelectTrigger className="bg-[#131313] border border-gray-800 text-white focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#2a2a2a] border-gray-700 text-white">
+                  <SelectContent className="bg-[#1e1e1e] border border-gray-800 text-white">
                     <SelectItem value="1-0-1">1-0-1</SelectItem>
                     <SelectItem value="0-1-1">0-1-1</SelectItem>
                     <SelectItem value="1-1-0">1-1-0</SelectItem>
@@ -537,7 +544,7 @@ const Medications = () => {
                 </Select>
               </div>
               <div>
-                <label>Phone Number</label>
+                <label className="text-sm sm:text-base text-gray-300 mb-2 block">Phone Number</label>
                 <Input
                   type="tel"
                   value={formData.phone_number}
@@ -545,21 +552,22 @@ const Medications = () => {
                     setFormData({ ...formData, phone_number: e.target.value })
                   }
                   placeholder="e.g. +919876543210"
-                  className="bg-[#1e1e1e] border-gray-600 text-white"
+                  className="bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
                 />
               </div>
             </div>
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 sm:mt-6">
               <Button
                 onClick={handleAddMedication}
-                className="bg-gray-800 hover:bg-gray-700 text-white"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition"
+                size="sm"
               >
                 Confirm & Schedule
               </Button>
               <Button
                 variant="ghost"
                 onClick={() => setShowAddForm(false)}
-                className="text-gray-400 hover:text-white"
+                className="border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800 transition"
               >
                 Cancel
               </Button>
@@ -568,46 +576,49 @@ const Medications = () => {
         )}
 
         {/* Medication Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {medications.map((m) => (
             <Card
               key={m.id}
-              className="p-6 bg-[#2a2a2a] border border-gray-700 text-white"
+              className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 text-white hover:shadow-lg transition-all duration-200"
             >
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-bold">{m.name}</h3>
+              <div className="flex justify-between items-start mb-3 sm:mb-4">
+                <h3 className="text-base sm:text-lg font-bold text-white flex-1 pr-2 break-words">{m.name}</h3>
                 <Button
                   variant="ghost"
-                  className="p-1 text-red-500 hover:bg-red-800"
+                  className="p-1 sm:p-2 text-red-400 hover:text-red-500 hover:bg-red-900/20 transition flex-shrink-0"
                   onClick={() => handleDeleteMedication(m.id)}
+                  size="sm"
                 >
-                  <Trash2 className="w-5 h-5" />
+                  <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Button>
               </div>
-              <div className="text-sm text-gray-400 mb-2">
-                Dosage: {m.dosage}
+              <div className="text-xs sm:text-sm text-gray-400 mb-2">
+                <span className="font-medium text-gray-300">Dosage:</span> {m.dosage || "-"}
               </div>
-              <div className="flex items-center text-gray-400 mb-2">
-                <Clock className="w-4 h-4 mr-2" />
+              <div className="flex items-center text-xs sm:text-sm text-gray-400 mb-2">
+                <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
                 <span>{m.time || "--:--"}</span>
               </div>
-              <div className="flex items-center text-gray-400 mb-2">
-                <Calendar className="w-4 h-4 mr-2" />
-                <span>{m.frequency}</span>
+              <div className="flex items-center text-xs sm:text-sm text-gray-400 mb-2">
+                <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
+                <span className="break-words">{m.frequency}</span>
               </div>
-              <div className="text-sm text-gray-400">
-                Phone: {m.phone_number || "-"}
+              <div className="text-xs sm:text-sm text-gray-400">
+                <span className="font-medium text-gray-300">Phone:</span> {m.phone_number || "-"}
               </div>
             </Card>
           ))}
           {medications.length === 0 && (
-            <div className="text-center col-span-full text-gray-400 mt-8">
-              No medications scheduled yet.
+            <div className="text-center col-span-full text-gray-400 mt-8 py-8">
+              <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-600" />
+              <p className="text-sm sm:text-base">No medications scheduled yet.</p>
             </div>
           )}
         </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -248,18 +248,18 @@ const QuizTaker = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/quizzes')}
-              className="mr-4 text-foreground hover:bg-accent"
+              className="text-foreground hover:bg-accent"
             >
-              <ArrowLeft className="w-5 h-5 mr-2" />
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Back
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">{currentQuiz.title}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground">{currentQuiz.title}</h1>
               <Badge className={getDifficultyColor(currentQuiz.difficulty)}>
                 {currentQuiz.difficulty}
               </Badge>
@@ -267,7 +267,7 @@ const QuizTaker = () => {
           </div>
           
           <div className="text-sm text-muted-foreground">
-            Question {currentQuestionIndex + 1} of {totalQuestions}
+            <span className="hidden sm:inline">Question </span>{currentQuestionIndex + 1}<span className="hidden sm:inline"> of {totalQuestions}</span>
           </div>
         </div>
 

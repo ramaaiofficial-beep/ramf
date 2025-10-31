@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, ReactNode } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -7,15 +7,14 @@ import {
   Upload,
   Trash2,
   Search,
-  LogOut,
-  User,
-  Settings,
   Folder,
   FolderOpen,
   ArrowLeft,
+  Menu,
+  X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ProfileForm } from "@/components/ProfileForm";
+import { Layout } from "@/components/Layout";
 import { API_URL } from "@/config/api";
 
 // 🎵 Song interface
@@ -24,109 +23,16 @@ interface Song {
   url: string;
 }
 
-interface LayoutProps {
-  children: ReactNode;
-  showNav?: boolean;
-}
-
-// 🧭 Layout
-const Layout = ({ children, showNav = true }: LayoutProps) => {
-  const navigate = useNavigate();
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [showProfileForm, setShowProfileForm] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowProfileMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-black text-white relative">
-      {showNav && (
-        <nav className="border-b border-gray-800 bg-black">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div
-                className="flex items-center space-x-8 cursor-pointer"
-                onClick={() => navigate("/chat")}
-              >
-                <img src="/RAMAAI.png" alt="RAMA AI Logo" className="h-28 w-auto" />
-              </div>
-
-              <div className="relative" ref={menuRef}>
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="p-1 text-white"
-                >
-                  <User className="w-6 h-6" />
-                </Button>
-
-                {showProfileMenu && (
-                  <div className="absolute right-0 mt-2 w-44 bg-[#1e1e1e]/90 backdrop-blur-md rounded-lg shadow-xl z-50 flex flex-col border border-gray-800">
-                    <button
-                      onClick={() => {
-                        setShowProfileForm(true);
-                        setShowProfileMenu(false);
-                      }}
-                      className="text-white px-4 py-2 text-left hover:bg-black transition"
-                    >
-                      Edit Profile
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        navigate("/manage-profile");
-                        setShowProfileMenu(false);
-                      }}
-                      className="text-white px-4 py-2 text-left hover:bg-black flex items-center transition"
-                    >
-                      <Settings className="w-4 h-4 mr-2 text-purple-400" />
-                      Manage Profile
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        sessionStorage.removeItem("token");
-                        navigate("/");
-                      }}
-                      className="text-white px-4 py-2 text-left hover:bg-black flex items-center transition"
-                    >
-                      <LogOut className="w-4 h-4 mr-2 text-red-400" />
-                      Logout
-                    </button>
-                  </div>
-                )}
-
-                {showProfileForm && (
-                  <ProfileForm onClose={() => setShowProfileForm(false)} />
-                )}
-              </div>
-            </div>
-          </div>
-        </nav>
-      )}
-      <div className="bg-black">{children}</div>
-    </div>
-  );
-};
-
 // 🎧 SongPage
 const SongPage: React.FC = () => {
+  const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const [songs, setSongs] = useState<Song[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [folderOpen, setFolderOpen] = useState(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
-
-  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const API_BASE = `${API_URL}/api/songs`;
 
   const fetchSongs = async () => {
@@ -141,6 +47,7 @@ const SongPage: React.FC = () => {
 
   useEffect(() => {
     fetchSongs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpload = async () => {
@@ -190,111 +97,175 @@ const SongPage: React.FC = () => {
   );
 
   return (
-    <Layout showNav={true}>
-      <div className="flex h-[calc(100vh-4rem)] bg-[#1e1e1e] text-white">
-        {/* Left Sidebar */}
-        <div className="w-72 bg-[#252526] border-r border-[#333] p-4 flex flex-col">
-          <Button
-            onClick={() => navigate("/elders")}
-            className="mb-4 bg-gray-700 hover:bg-gray-600 text-sm"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
-          </Button>
-
-          <div className="flex items-center mb-4">
-            <Music className="mr-2 text-blue-400" />
-            <h1 className="text-lg font-semibold">Songs Explorer</h1>
-          </div>
-
-          {/* Upload */}
-          <div className="space-y-2 mb-4">
-            <Input
-              type="file"
-              accept="audio/*"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="text-sm text-gray-300 bg-[#1e1e1e] border-[#333]"
-            />
+    <Layout showNav>
+      <div className="min-h-screen bg-black text-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black to-blue-900/30 blur-3xl opacity-40 pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 relative z-10">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center mb-6 sm:mb-8 gap-4">
             <Button
-              onClick={handleUpload}
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              variant="ghost"
+              onClick={() => navigate("/elders")}
+              className="text-gray-400 hover:text-white hover:bg-[#1e1e1e]"
             >
-              <Upload className="mr-2 h-4 w-4" />
-              {loading ? "Uploading..." : "Upload Song"}
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+              Back
             </Button>
-          </div>
-
-          {/* Search */}
-          <div className="flex items-center gap-2 mb-3">
-            <Search className="text-gray-400" size={16} />
-            <Input
-              placeholder="Search song..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="text-sm bg-[#1e1e1e] border-[#333] text-gray-300"
-            />
-          </div>
-
-          {/* Folder View */}
-          <div>
-            <div
-              onClick={() => setFolderOpen(!folderOpen)}
-              className="flex items-center gap-2 cursor-pointer px-2 py-1 hover:bg-[#2d2d2d] rounded"
-            >
-              {folderOpen ? (
-                <FolderOpen className="text-yellow-400" size={18} />
-              ) : (
-                <Folder className="text-yellow-400" size={18} />
-              )}
-              <span className="text-sm text-gray-200">Songs</span>
+            <div className="flex-1">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white flex items-center gap-2">
+                <Music className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" />
+                Songs Explorer
+              </h1>
+              <p className="text-sm sm:text-base text-gray-400 mt-2">
+                Upload and manage your favorite songs
+              </p>
             </div>
+          </div>
 
-            {folderOpen && (
-              <div className="pl-6 mt-2 space-y-1 max-h-64 overflow-y-auto">
-                {filteredSongs.length === 0 ? (
-                  <p className="text-gray-400 text-sm mt-2">No songs found.</p>
-                ) : (
-                  filteredSongs.map((song) => (
-                    <div
-                      key={song.name}
-                      className="flex justify-between items-center py-1 px-2 rounded hover:bg-[#2d2d2d] cursor-pointer"
-                      onClick={() => handleSongSelect(song)}
-                    >
-                      <span className="truncate text-gray-200 text-sm">{song.name}</span>
-                      <Trash2
-                        size={16}
-                        className="text-red-400 hover:text-red-500"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(song.name);
-                        }}
-                      />
-                    </div>
-                  ))
+          {/* Mobile Sidebar Toggle */}
+          {!sidebarOpen && (
+            <Button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden mb-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 shadow-xl transition-all duration-200"
+            >
+              <Menu className="w-4 h-4 mr-2" />
+              Show Songs List
+            </Button>
+          )}
+
+          {/* Mobile Overlay */}
+          {sidebarOpen && (
+            <div
+              className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-20"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 w-full overflow-hidden">
+            {/* Left Sidebar - Songs List */}
+            <Card
+              className={`lg:w-72 bg-[#1e1e1e] border border-gray-800 p-4 sm:p-6 flex flex-col ${
+                sidebarOpen
+                  ? "fixed inset-y-0 left-0 z-30 w-72 shadow-2xl"
+                  : "hidden lg:flex"
+              }`}
+            >
+              {sidebarOpen && (
+                <Button
+                  variant="ghost"
+                  onClick={() => setSidebarOpen(false)}
+                  className="lg:hidden mb-4 self-end text-gray-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              )}
+
+              {/* Upload */}
+              <div className="space-y-2 mb-4">
+                <Input
+                  type="file"
+                  accept="audio/*"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  className="text-sm bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition"
+                />
+                <Button
+                  onClick={handleUpload}
+                  disabled={loading || !file}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition"
+                  size="sm"
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  {loading ? "Uploading..." : "Upload Song"}
+                </Button>
+              </div>
+
+              {/* Search */}
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Search song..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-9 sm:pl-10 bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
+                />
+              </div>
+
+              {/* Folder View */}
+              <div>
+                <div
+                  onClick={() => setFolderOpen(!folderOpen)}
+                  className="flex items-center gap-2 cursor-pointer px-2 py-2 hover:bg-[#131313] rounded transition"
+                >
+                  {folderOpen ? (
+                    <FolderOpen className="text-purple-400 w-5 h-5" />
+                  ) : (
+                    <Folder className="text-purple-400 w-5 h-5" />
+                  )}
+                  <span className="text-sm text-white font-medium">Songs ({songs.length})</span>
+                </div>
+
+                {folderOpen && (
+                  <div className="pl-6 mt-2 space-y-2 max-h-[400px] sm:max-h-96 overflow-y-auto">
+                    {filteredSongs.length === 0 ? (
+                      <p className="text-gray-400 text-sm mt-2 py-4 text-center">No songs found.</p>
+                    ) : (
+                      filteredSongs.map((song) => (
+                        <div
+                          key={song.name}
+                          className={`flex justify-between items-center py-2 px-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                            selectedSong?.name === song.name
+                              ? "bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-600 shadow-lg"
+                              : "bg-[#131313] border border-gray-800 hover:bg-[#1e1e1e] hover:border-gray-600"
+                          }`}
+                          onClick={() => {
+                            handleSongSelect(song);
+                            if (window.innerWidth < 1024) {
+                              setSidebarOpen(false);
+                            }
+                          }}
+                        >
+                          <span className="truncate text-white text-sm flex-1">{song.name}</span>
+                          <Trash2
+                            size={16}
+                            className="text-red-400 hover:text-red-500 ml-2 flex-shrink-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(song.name);
+                            }}
+                          />
+                        </div>
+                      ))
+                    )}
+                  </div>
                 )}
               </div>
-            )}
+            </Card>
+
+            {/* Right Panel - Audio Player */}
+            <div className="flex-1 min-w-0 w-full overflow-hidden">
+              {selectedSong ? (
+                <Card className="bg-[#1e1e1e] border border-gray-800 p-4 sm:p-6 w-full">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 sm:mb-6 text-white flex items-start gap-2 w-full overflow-hidden">
+                    <Music className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400 flex-shrink-0 mt-1" />
+                    <span className="break-words break-all min-w-0 flex-1 overflow-hidden" style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}>{selectedSong.name}</span>
+                  </h2>
+                  <div className="bg-[#131313] border border-gray-800 rounded-lg p-4 sm:p-6 w-full overflow-hidden">
+                    <audio controls className="w-full max-w-full">
+                      <source src={selectedSong.url} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                </Card>
+              ) : (
+                <Card className="bg-[#1e1e1e] border border-gray-800 p-8 sm:p-12 text-center">
+                  <Music className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                  <p className="text-gray-400 text-sm sm:text-base">
+                    Select a song from the list to play it
+                  </p>
+                </Card>
+              )}
+            </div>
           </div>
-
-          <p className="text-xs text-gray-500 mt-3">Total Songs: {songs.length}</p>
-        </div>
-
-        {/* Right Panel */}
-        <div className="flex-1 bg-[#1e1e1e] p-8 overflow-y-auto">
-          {selectedSong ? (
-            <>
-              <h2 className="text-xl font-semibold mb-6 text-blue-400">🎧 {selectedSong.name}</h2>
-              <Card className="bg-[#2d2d2d] p-4 mb-6">
-                <audio controls className="w-full">
-                  <source src={selectedSong.url} type="audio/mpeg" />
-                  Your browser does not support the audio element.
-                </audio>
-              </Card>
-            </>
-          ) : (
-            <p className="text-gray-500 text-sm">Select a song from the left to play it.</p>
-          )}
         </div>
       </div>
     </Layout>

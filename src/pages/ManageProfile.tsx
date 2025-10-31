@@ -32,11 +32,11 @@ const ManageProfile = () => {
         </div>
 
         {/* Two glossy cards */}
-        <div className="relative z-10 flex flex-wrap justify-center gap-6 pb-20">
+        <div className="relative z-10 flex flex-wrap justify-center gap-4 sm:gap-6 pb-12 sm:pb-20">
           {/* Elder Card */}
           <div
             onClick={() => navigate("/elders")}
-            className="cursor-pointer w-[220px] h-[150px] bg-[#1e1e1e]/70 backdrop-blur-md rounded-2xl p-6 text-white border border-gray-800 shadow-lg hover:shadow-purple-600/40 hover:scale-105 transition-transform"
+            className="cursor-pointer w-full max-w-[220px] sm:w-[220px] h-[140px] sm:h-[150px] bg-[#1e1e1e]/70 backdrop-blur-md rounded-2xl p-4 sm:p-6 text-white border border-gray-800 shadow-lg hover:shadow-purple-600/40 hover:scale-105 transition-transform"
           >
             <div className="bg-gradient-to-br from-purple-600 to-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-white shadow-md">
               <UserCog className="w-6 h-6" />
@@ -48,7 +48,7 @@ const ManageProfile = () => {
           {/* Younger Card */}
           <div
             onClick={() => navigate("/younger")}
-            className="cursor-pointer w-[220px] h-[150px] bg-[#1e1e1e]/70 backdrop-blur-md rounded-2xl p-6 text-white border border-gray-800 shadow-lg hover:shadow-blue-600/40 hover:scale-105 transition-transform"
+            className="cursor-pointer w-full max-w-[220px] sm:w-[220px] h-[140px] sm:h-[150px] bg-[#1e1e1e]/70 backdrop-blur-md rounded-2xl p-4 sm:p-6 text-white border border-gray-800 shadow-lg hover:shadow-blue-600/40 hover:scale-105 transition-transform"
           >
             <div className="bg-gradient-to-br from-blue-600 to-purple-600 w-12 h-12 rounded-xl flex items-center justify-center mb-3 text-white shadow-md">
               <Smile className="w-6 h-6" />

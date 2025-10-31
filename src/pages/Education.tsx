@@ -3,9 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Upload, Search, Send, Mic, Music } from "lucide-react";
+import { ArrowLeft, Upload, Search, Send, Mic, Music, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { Layout } from "@/components/Layout";
 import { API_URL } from "@/config/api";
 
 interface Document {
@@ -389,41 +390,44 @@ const Education = () => {
 
   // -------------------- Render --------------------
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="container mx-auto px-4 py-8">
+    <Layout showNav>
+      <div className="min-h-screen bg-black text-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black to-blue-900/30 blur-3xl opacity-40 pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 relative z-10">
         {/* Header */}
-        <div className="flex items-center mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <Button
             variant="ghost"
             onClick={() => navigate("/elders")}
             aria-label="Go back"
-            className="mr-4 text-gray-400 hover:text-white hover:bg-[#1e1e1e]"
+            className="text-gray-400 hover:text-white hover:bg-[#1e1e1e]"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" /> Back
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-2" /> Back
           </Button>
-          <div>
-            <h1 className="text-4xl font-bold text-white">Health Assistent</h1>
-            <p className="text-gray-400 mt-2">
-              Access your medical history get instant help from our AI assistant
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Health Assistant</h1>
+            <p className="text-sm sm:text-base text-gray-400 mt-2">
+              Access your medical history and get instant help from our AI assistant
             </p>
             {elderName && (
-              <div className="mt-2 inline-flex items-center gap-2 text-sm">
-                <span className="px-2 py-1 rounded-md bg-gray-800 border border-gray-700 text-gray-200">Elder: {elderName}</span>
+              <div className="mt-2 inline-flex items-center gap-2 text-xs sm:text-sm">
+                <span className="px-2 py-1 rounded-md bg-[#131313] border border-gray-800 text-purple-400 font-medium">Elder: {elderName}</span>
               </div>
             )}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* Upload Sections */}
-          <Card className="p-6 bg-[#1e1e1e] border border-gray-800 space-y-6">
+          <Card className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 space-y-4 sm:space-y-6">
             {/* Medical */}
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-white">Medical Documents</h2>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-white">Medical Documents</h2>
                 <Button
                   onClick={() => handleFileUpload(medicalInputRef)}
-                  className="bg-gray-700 hover:bg-gray-600"
+                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition shadow-lg"
+                  size="sm"
                 >
                   <Upload className="w-4 h-4 mr-2" /> Upload
                 </Button>
@@ -441,37 +445,47 @@ const Education = () => {
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
               <Input
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search files..."
-                className="pl-10 bg-[#1e1e1e] border border-gray-800 text-white placeholder-gray-400"
+                className="pl-9 sm:pl-10 bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
               />
             </div>
 
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+            <div className="space-y-3 sm:space-y-4 max-h-[400px] sm:max-h-96 overflow-y-auto">
               {filteredDocuments.length > 0 ? (
                 filteredDocuments.map((doc) => (
                   <div
                     key={doc.id}
-                    className={`p-4 rounded-lg border ${
+                    className={`p-3 sm:p-4 rounded-lg border transition-all duration-200 ${
                       currentFile === doc.name
-                        ? "bg-blue-900 border-blue-600"
-                        : "bg-[#1e1e1e] border-gray-700 hover:bg-gray-800"
+                        ? "bg-gradient-to-r from-purple-600/20 to-blue-600/20 border-purple-600 shadow-lg"
+                        : "bg-[#131313] border-gray-700 hover:bg-[#1e1e1e] hover:border-gray-600"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                    <div className="flex-1 cursor-pointer" onClick={() => { if (doc.category !== "Songs") { setCurrentFile(doc.name); if (lastFileKey) sessionStorage.setItem(lastFileKey, doc.name); } }}>
-                        <h3 className="font-semibold text-white mb-2">{doc.name}</h3>
-                        <div className="flex justify-between items-center text-sm text-gray-400">
+                    <div 
+                      className="flex-1 min-w-0 cursor-pointer" 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        if (doc.category !== "Songs") { 
+                          setCurrentFile(doc.name); 
+                          if (lastFileKey) sessionStorage.setItem(lastFileKey, doc.name); 
+                        } 
+                      }}
+                    >
+                        <h3 className="font-semibold text-sm sm:text-base text-white mb-2 truncate">{doc.name}</h3>
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs sm:text-sm text-gray-400">
                           <span className="px-2 py-1 bg-gray-700 rounded-md">{doc.category}</span>
                           <span>{doc.date}</span>
                         </div>
                       </div>
                       <button
-                        className="shrink-0 px-2 py-1 text-xs rounded border border-red-600 text-red-500 hover:bg-red-600/20"
-                        onClick={async () => {
+                        className="shrink-0 p-2 sm:p-1.5 rounded-lg border border-red-600 text-red-400 hover:bg-red-600/20 hover:text-red-500 transition flex items-center justify-center min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0"
+                        onClick={async (e) => {
+                          e.stopPropagation();
                           try {
                             const token = typeof window !== "undefined" ? sessionStorage.getItem("token") : null;
                             const headers: Record<string, string> = {};
@@ -488,26 +502,33 @@ const Education = () => {
                         }}
                         aria-label="Delete"
                       >
-                        Delete
+                        <Trash2 className="w-4 h-4 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-500 text-center">No files found.</p>
+                <div className="text-center py-8 px-4">
+                  <Search className="h-12 w-12 text-gray-600 mx-auto mb-3" />
+                  <p className="text-gray-400 text-sm">
+                    {searchQuery ? "No files found" : "No medical documents uploaded yet"}
+                  </p>
+                </div>
               )}
             </div>
           </Card>
 
           {/* Assistant */}
-          <Card className="p-6 bg-[#1e1e1e] border border-gray-800 flex flex-col">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">AI Health Assistant</h2>
-              <span className="text-green-400">Online</span>
+          <Card className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 flex flex-col space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+              <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+                AI Health Assistant
+              </h2>
+              <span className="text-xs sm:text-sm px-3 py-1 bg-green-600/20 border border-green-600/50 text-green-400 rounded-full font-semibold">Online</span>
             </div>
 
             <div
-              className="flex-1 space-y-4 mb-6 max-h-96 overflow-y-auto"
+              className="flex-1 space-y-3 sm:space-y-4 mb-4 sm:mb-6 max-h-[400px] sm:max-h-96 overflow-y-auto p-2"
               role="log"
               aria-live="polite"
             >
@@ -517,18 +538,20 @@ const Education = () => {
                   className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                    className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl ${
                       msg.type === "user"
-                        ? "bg-gray-700 text-white"
-                        : "bg-[#1e1e1e] text-white"
+                        ? "bg-gradient-to-r from-purple-600/80 to-blue-600/80 text-white"
+                        : "bg-[#131313] border border-gray-800 text-white"
                     }`}
                   >
                     {msg.type === "assistant" ? (
-                      renderStructuredContent(msg.content)
+                      <div className="text-sm sm:text-base">
+                        {renderStructuredContent(msg.content)}
+                      </div>
                     ) : (
-                      <p className="text-sm leading-relaxed">{msg.content}</p>
+                      <p className="text-sm sm:text-base leading-relaxed">{msg.content}</p>
                     )}
-                    <p className="text-xs opacity-60 mt-2">{msg.timestamp}</p>
+                    <p className="text-xs opacity-60 mt-2 text-right">{msg.timestamp}</p>
                   </div>
                 </div>
               ))}
@@ -536,19 +559,35 @@ const Education = () => {
 
             {/* Song player */}
             {currentSongUrl && (
-              <div className="mb-4 p-3 rounded-lg bg-gray-800 flex items-center gap-3">
-                <Music className="w-5 h-5 text-green-400" />
-                <span className="text-sm flex-1">{currentSongName}</span>
-                <audio ref={audioRef} controls src={currentSongUrl} className="w-40" />
+              <div className="mb-3 sm:mb-4 p-3 sm:p-4 rounded-lg bg-[#131313] border border-gray-800 flex items-center gap-3 flex-col sm:flex-row">
+                <Music className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                <span className="text-sm sm:text-base text-white flex-1 truncate">{currentSongName}</span>
+                <audio ref={audioRef} controls src={currentSongUrl} className="w-full sm:w-40" />
               </div>
             )}
 
             {/* Quick actions when a file is selected */}
             {currentFile && (
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Button size="sm" className="bg-gray-700 hover:bg-gray-600" onClick={() => handleSendMessage(`Summarize the uploaded document "${currentFile}" in a concise, student-friendly way.`)}>Summarize</Button>
-                <Button size="sm" className="bg-gray-700 hover:bg-gray-600" onClick={() => handleSendMessage(`List the key points and takeaways from the uploaded document "${currentFile}" as clean bullet points.`)}>Key Points</Button>
-                <Button size="sm" disabled={quizLoading} className={`bg-gray-700 hover:bg-gray-600 ${quizLoading ? 'opacity-60 cursor-not-allowed' : ''}`} onClick={async () => {
+              <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
+                <Button 
+                  size="sm" 
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition text-xs sm:text-sm" 
+                  onClick={() => handleSendMessage(`Summarize the uploaded document "${currentFile}" in a concise, student-friendly way.`)}
+                >
+                  Summarize
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition text-xs sm:text-sm" 
+                  onClick={() => handleSendMessage(`List the key points and takeaways from the uploaded document "${currentFile}" as clean bullet points.`)}
+                >
+                  Key Points
+                </Button>
+                <Button 
+                  size="sm" 
+                  disabled={quizLoading} 
+                  className={`bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition text-xs sm:text-sm ${quizLoading ? 'opacity-60 cursor-not-allowed' : ''}`} 
+                  onClick={async () => {
                   if (!elderId || !currentFile) return;
                   try {
                     setQuizLoading(true);
@@ -576,34 +615,39 @@ const Education = () => {
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 bg-[#1e1e1e] border border-gray-800 text-white placeholder-gray-400"
+                className="flex-1 bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm h-9 sm:h-10"
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
               />
-              <Button onClick={() => handleSendMessage()} className="bg-gray-700 hover:bg-gray-600">
+              <Button 
+                onClick={() => handleSendMessage()} 
+                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition"
+                size="sm"
+              >
                 <Send className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
                 className={`${
-                  isListening ? "text-green-400 animate-pulse" : "text-gray-400 hover:text-white"
-                }`}
+                  isListening ? "text-green-400 animate-pulse" : "text-gray-400 hover:text-purple-400"
+                } transition`}
                 onClick={handleVoiceInput}
+                size="sm"
               >
                 <Mic className="w-4 h-4" />
               </Button>
             </div>
           </Card>
           {quiz && (
-            <Card className="p-6 bg-[#1e1e1e] border border-gray-800 mt-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold">Quiz</h3>
-                <div className="text-sm text-gray-300">Answered {answers.filter(a => a !== -1).length} / {quiz.length}</div>
+            <Card className="p-4 sm:p-6 bg-[#1e1e1e] border border-gray-800 mt-4 sm:mt-6 col-span-1 lg:col-span-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-white">Quiz</h3>
+                <div className="text-xs sm:text-sm text-gray-300">Answered {answers.filter(a => a !== -1).length} / {quiz.length}</div>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {quiz.map((q, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <div className="font-medium">{idx + 1}. {q.question}</div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <div key={idx} className="space-y-2 p-3 sm:p-4 bg-[#131313] border border-gray-800 rounded-lg">
+                    <div className="font-medium text-sm sm:text-base text-white mb-3">{idx + 1}. {q.question}</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {q.options.map((opt, oi) => {
                         const selected = answers[idx] === oi;
                         const correct = showResults && q.answerIndex === oi;
@@ -613,12 +657,21 @@ const Education = () => {
                           <button
                             key={oi}
                             onClick={() => !showResults && setAnswers(prev => { const copy = [...prev]; copy[idx] = oi; return copy; })}
-                            className={`text-left px-3 py-2 rounded border transition-colors flex items-start gap-2 ${
-                              correct ? 'border-green-600 bg-green-900/30' : wrongSel ? 'border-red-600 bg-red-900/30' : selected ? 'border-blue-600 bg-blue-900/20' : 'border-gray-700 hover:bg-gray-800'
-                            }`}
+                            disabled={showResults}
+                            className={`text-left px-3 py-2 rounded-lg border transition-all duration-200 flex items-start gap-2 text-xs sm:text-sm w-full ${
+                              correct ? 'border-green-600 bg-green-600/20 text-green-400' : 
+                              wrongSel ? 'border-red-600 bg-red-600/20 text-red-400' : 
+                              selected ? 'border-purple-600 bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-white' : 
+                              'border-gray-700 hover:bg-gray-800 text-gray-300'
+                            } ${showResults ? 'opacity-80' : ''}`}
                           >
-                            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs mt-0.5 ${selected ? 'bg-blue-600' : 'bg-gray-700'}`}>{letter}</span>
-                            <span>{opt}</span>
+                            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs mt-0.5 flex-shrink-0 ${
+                              correct ? 'bg-green-600 text-white' :
+                              wrongSel ? 'bg-red-600 text-white' :
+                              selected ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' :
+                              'bg-gray-700 text-gray-300'
+                            }`}>{letter}</span>
+                            <span className="break-words flex-1 text-left">{opt}</span>
                           </button>
                         );
                       })}
@@ -626,14 +679,28 @@ const Education = () => {
                   </div>
                 ))}
               </div>
-              <div className="mt-6 flex gap-2">
+              <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4 items-center">
                 {!showResults ? (
-                  <Button disabled={answers.some(a => a === -1)} className={`bg-gray-700 hover:bg-gray-600 ${answers.some(a => a === -1) ? 'opacity-60 cursor-not-allowed' : ''}`} onClick={() => setShowResults(true)}>Submit</Button>
+                  <Button 
+                    disabled={answers.some(a => a === -1)} 
+                    className={`bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90 transition ${answers.some(a => a === -1) ? 'opacity-60 cursor-not-allowed' : ''}`}
+                    onClick={() => setShowResults(true)}
+                    size="sm"
+                  >
+                    Submit Quiz
+                  </Button>
                 ) : (
-                  <Button variant="outline" className="border-gray-700" onClick={() => { setShowResults(false); setAnswers(new Array(quiz.length).fill(-1)); }}>Retry</Button>
+                  <Button 
+                    variant="outline" 
+                    className="border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800 transition"
+                    onClick={() => { setShowResults(false); setAnswers(new Array(quiz.length).fill(-1)); }}
+                    size="sm"
+                  >
+                    Retry Quiz
+                  </Button>
                 )}
                 {showResults && (
-                  <div className="ml-2 self-center text-sm text-gray-300">
+                  <div className="text-xs sm:text-sm text-gray-300">
                     Score: {answers.reduce((acc, a, i) => acc + (a === quiz[i].answerIndex ? 1 : 0), 0)} / {quiz.length}
                   </div>
                 )}
@@ -641,8 +708,9 @@ const Education = () => {
             </Card>
           )}
         </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -222,7 +222,7 @@ export const ChatInterface = () => {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center bg-black text-white px-4 relative overflow-hidden">
+    <div className="h-full min-h-[calc(100vh-4rem)] w-full flex flex-col items-center justify-center bg-black text-white px-2 sm:px-4 relative overflow-hidden py-4">
       {/* Apple Intelligence-style border glow */}
       <div
         className={cn(
@@ -269,7 +269,7 @@ export const ChatInterface = () => {
       )}
 
       {chatStarted && (
-        <div className="w-full max-w-4xl h-[60vh] overflow-y-auto p-4 bg-[#0a0a0a]/80 backdrop-blur-lg rounded-2xl mb-6 space-y-6 border border-gray-800 shadow-xl">
+        <div className="w-full max-w-4xl h-[50vh] sm:h-[60vh] overflow-y-auto p-3 sm:p-4 bg-[#0a0a0a]/80 backdrop-blur-lg rounded-2xl mb-4 sm:mb-6 space-y-4 sm:space-y-6 border border-gray-800 shadow-xl">
           {messages.map((msg) => (
             <div key={msg.id} className={cn("flex gap-3", msg.role === "user" ? "ml-auto" : "")}>
               {msg.role === "assistant" && (
@@ -351,7 +351,7 @@ export const ChatInterface = () => {
       )}
 
       {/* Input */}
-      <div className="flex items-center w-[600px] max-w-full bg-[#1e1e1e]/70 backdrop-blur-lg rounded-full px-4 py-2 shadow-xl border border-gray-800 hover:shadow-purple-700/20 transition relative">
+      <div className="flex items-center w-full max-w-[600px] bg-[#1e1e1e]/70 backdrop-blur-lg rounded-full px-3 sm:px-4 py-2 shadow-xl border border-gray-800 hover:shadow-purple-700/20 transition relative">
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}

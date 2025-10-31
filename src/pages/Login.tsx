@@ -86,11 +86,11 @@ export default function Login() {
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center bg-black px-4">
-        <div className="w-full max-w-md p-6">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-white mb-2">RAMA AI</h1>
-            <p className="text-gray-300">Advanced AI Assistant Platform</p>
+      <div className="min-h-screen flex items-center justify-center bg-black px-4 py-8">
+        <div className="w-full max-w-md p-4 sm:p-6">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">RAMA AI</h1>
+            <p className="text-sm sm:text-base text-gray-300">Advanced AI Assistant Platform</p>
           </div>
 
           <Card className="bg-[#1e1e1e] border border-gray-700 shadow-lg">
