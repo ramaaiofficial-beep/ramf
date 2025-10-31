@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* RAMA AI Design System - Premium Modern Interface */
+
+@layer base {
+  :root {
+    /* Core palette - Modern blacks, grays, whites, cream */
+    --background: 210 11% 3%;
+    --foreground: 36 39% 88%;
+    --surface: 210 9% 7%;
+    --surface-elevated: 210 7% 11%;
+
+    --card: 210 9% 7%;
+    --card-foreground: 36 39% 88%;
+
+    --popover: 210 7% 11%;
+    --popover-foreground: 36 39% 88%;
+
+    /* Premium accent colors */
+    --primary: 36 39% 88%;
+    --primary-foreground: 210 11% 3%;
+    --primary-glow: 36 45% 92%;
+
+    --secondary: 210 7% 15%;
+    --secondary-foreground: 36 39% 88%;
+
+    --muted: 210 7% 15%;
+    --muted-foreground: 210 6% 46%;
+
+    --accent: 36 45% 92%;
+    --accent-foreground: 210 11% 3%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 36 39% 88%;
+
+    --border: 210 7% 15%;
+    --input: 210 7% 11%;
+    --ring: 36 45% 92%;
+
+    --radius: 0.75rem;
+
+    /* RAMA AI Specific Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(210 11% 3%), hsl(210 7% 11%));
+    --gradient-accent: linear-gradient(135deg, hsl(36 39% 88%), hsl(36 45% 92%));
+    --gradient-surface: linear-gradient(180deg, hsl(210 9% 7%), hsl(210 7% 11%));
+    
+    --shadow-premium: 0 20px 40px -12px hsl(210 11% 1% / 0.5);
+    --shadow-glow: 0 0 30px hsl(36 45% 92% / 0.15);
+    
+    --animation-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --animation-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Light mode overrides */
+    .light & {
+      --background: 36 39% 97%;
+      --foreground: 210 11% 15%;
+      --surface: 36 20% 94%;
+      --surface-elevated: 0 0% 100%;
+      --card: 0 0% 100%;
+      --card-foreground: 210 11% 15%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 210 11% 15%;
+      --primary: 210 11% 15%;
+      --primary-foreground: 36 39% 97%;
+      --secondary: 210 7% 92%;
+      --secondary-foreground: 210 11% 15%;
+      --muted: 210 7% 92%;
+      --muted-foreground: 210 6% 46%;
+      --accent: 210 11% 15%;
+      --accent-foreground: 36 39% 97%;
+      --border: 210 7% 87%;
+      --input: 210 7% 92%;
+      --ring: 210 11% 15%;
+    }
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .animate-slideIn {
+    animation: slideIn 0.4s ease-out;
+  }
+}
