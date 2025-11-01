@@ -158,6 +158,10 @@ export default function Youngers() {
       address: "",
       notes: ""
     });
+    // Open sidebar on mobile when adding profile
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(true);
+    }
   };
 
   const handleEditProfile = (profile: Profile) => {
@@ -308,7 +312,6 @@ export default function Youngers() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-9 sm:pl-10 bg-[#131313] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm"
-                size="sm"
               />
             </div>
           </div>
@@ -417,7 +420,6 @@ export default function Youngers() {
                             }))
                           }
                           className="bg-[#1e1e1e] border border-gray-800 text-white placeholder-gray-400 focus:border-purple-600 focus:ring-1 focus:ring-purple-600 transition text-sm"
-                          size="sm"
                         />
                       )}
                     </div>
