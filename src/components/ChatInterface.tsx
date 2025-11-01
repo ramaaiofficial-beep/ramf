@@ -263,7 +263,7 @@ export const ChatInterface = () => {
       {/* Removed peeking assistant illustration per request */}
 
       {!chatStarted && (
-        <h1 className="text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 animate-fade-in">
+        <h1 className="text-sm sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 animate-fade-in px-4 text-center">
           {startupPrompt}
         </h1>
       )}
@@ -351,12 +351,12 @@ export const ChatInterface = () => {
       )}
 
       {/* Input */}
-      <div className="flex items-center w-full max-w-[600px] bg-[#1e1e1e]/70 backdrop-blur-lg rounded-full px-3 sm:px-4 py-2 shadow-xl border border-gray-800 hover:shadow-purple-700/20 transition relative">
+      <div className="flex items-center w-full max-w-[600px] bg-[#1e1e1e]/70 backdrop-blur-lg rounded-full px-2 py-1.5 sm:px-4 sm:py-2 shadow-xl border border-gray-800 hover:shadow-purple-700/20 transition relative">
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Speak or type your message..."
-          className="flex-1 bg-transparent border-0 focus:ring-0 text-white placeholder:text-gray-400"
+          className="flex-1 bg-transparent border-0 focus:ring-0 text-white placeholder:text-gray-400 text-xs sm:text-base"
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
           disabled={isLoading}
         />
@@ -369,7 +369,7 @@ export const ChatInterface = () => {
             isListening ? "text-green-400" : "text-gray-400 hover:text-purple-400"
           )}
         >
-          <Mic className={cn("h-5 w-5", isListening && "animate-pulse")} />
+          <Mic className={cn("h-4 w-4 sm:h-5 sm:w-5", isListening && "animate-pulse")} />
         </Button>
         <Button
           onClick={() => handleSend()}
@@ -378,7 +378,7 @@ export const ChatInterface = () => {
           size="icon"
           className="text-gray-400 hover:text-purple-400 transition"
         >
-          <Send className="h-5 w-5" />
+          <Send className="h-4 w-4 sm:h-5 sm:w-5" />
         </Button>
       </div>
 
